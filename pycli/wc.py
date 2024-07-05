@@ -20,14 +20,8 @@ class WC:
             if self.n_lines or self.n_chars or self.n_words:
                 l, m, w = self.count_more(file)
 
-            output = (
-                    f"{str(l) + "\t" if self.n_lines else ""}"
-                    f"{str(w) + "\t" if self.n_words else ""}"
-                    f"{str(c) + "\t" if self.c_bytes else ""}"
-                    f"{str(m) + "\t" if self.n_chars else ""}"
-                    f"{file}"
-                )
-            sys.stdout.write(output + "\n")
+            self.output(c, l, m, w, file)
+            
             total_c += c
             total_l += l
             total_m += m
