@@ -2,7 +2,7 @@ import os
 import sys
 
 # default is always in the order of: lines\tc\tbytes
-
+# @TODO handle standard in
 
 class WC:
     def __init__(self, files, c_bytes, n_lines, n_chars, n_words):
@@ -13,21 +13,38 @@ class WC:
         self.n_words = n_words
 
     def wc(self):
-
+        total_c, total_l, total_m, total_w = 0, 0, 0, 0
         for file in self.files:
             if self.c_bytes:
-                bs = self.count_bytes(file)
+                c = self.count_bytes(file)
             if self.n_lines or self.n_chars or self.n_words:
-                l, c, w = self.count_more(file)
+                l, m, w = self.count_more(file)
 
             output = (
                     f"{str(l) + "\t" if self.n_lines else ""}"
                     f"{str(w) + "\t" if self.n_words else ""}"
-                    f"{str(bs) + "\t" if self.c_bytes else ""}"
-                    f"{str(c) + "\t" if self.n_chars else ""}"
+                    f"{str(c) + "\t" if self.c_bytes else ""}"
+                    f"{str(m) + "\t" if self.n_chars else ""}"
                     f"{file}"
                 )
             sys.stdout.write(output + "\n")
+            total_c += c
+            total_l += l
+            total_m += m
+            total_w += w
+        
+        if len(self.files) > 1:
+            self.output(total_c, total_l, total_m, total_w, "total")
+
+    def output(self, c, l, m, w, file):
+        output = (
+        f"{str(l) + "\t" if self.n_lines else ""}"
+        f"{str(w) + "\t" if self.n_words else ""}"
+        f"{str(c) + "\t" if self.c_bytes else ""}"
+        f"{str(m) + "\t" if self.n_chars else ""}"
+        f"{file}"
+        )
+        sys.stdout.write(output + "\n")
 
     def _c_gen(self, reader):
         b = reader(2**16)
@@ -56,7 +73,7 @@ class WC:
 
     def count_bytes(self, file):
         try:
-            return str(os.stat(file).st_size)
+            return os.stat(file).st_size
         except FileNotFoundError as e:
             print(e)
         except IsADirectoryError as e:
