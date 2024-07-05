@@ -2,6 +2,8 @@
 
 import argparse
 from .head import Head
+from .wc import WC
+import sys
 
 
 def main():
@@ -23,7 +25,11 @@ def main():
 
     # WC command
     wc_parse = subparser.add_parser(name="wc")
-    wc_parse.add_argument("-l", dest="operand", type=int)
+    wc_parse.add_argument("files", type=str, nargs="*", default=sys.stdin)
+    wc_parse.add_argument("-c", dest="c", action="store_true")
+    wc_parse.add_argument("-l", dest="l", action="store_true")
+    wc_parse.add_argument("-m", dest="m", action="store_true")
+    wc_parse.add_argument("-w", dest="w", action="store_true")
 
     # Gather up the args passed to us
     args = parser.parse_args()
@@ -38,9 +44,12 @@ def main():
                 head.head("lines")
             if args.c:
                 head.head("bytes")
+        if args.commands == "wc":
+            print(type(args.files))
+            wc = WC(args.files, args.c, args.l, args.m, args.w)
+            wc.wc()
     except Exception as e:
         print(e)
-        parser.error("Error")
     # print(head_parse.parse_args())
 
 

@@ -13,8 +13,6 @@ class Head:
         if type == "bytes":
             mode += "b"
 
-        print(self.files)
-
         for file in self.files:
             if len(self.files) > 1:
                 print(f"\n==> {file} <==")
@@ -33,4 +31,7 @@ class Head:
                             break
 
             except FileNotFoundError as e:
+                print(e)
+
+            except IsADirectoryError as e:
                 print(e)
