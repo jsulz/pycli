@@ -1,14 +1,7 @@
 """Main entry point for PyCLI"""
 
 import argparse
-
-
-def head(f, n, c):
-    return f, n, c
-
-
-def wc(l):
-    return l
+from .head import Head
 
 
 def main():
@@ -24,15 +17,13 @@ def main():
 
     # Head command
     head_parse = subparser.add_parser(name="head")
-    head_parse.add_argument("file", type=str)
+    head_parse.add_argument("files", type=str, nargs="+")
     head_parse.add_argument("-n", dest="n", type=int)
     head_parse.add_argument("-c", dest="c", type=int)
-    head_parse.set_defaults(func=head)
 
     # WC command
     wc_parse = subparser.add_parser(name="wc")
     wc_parse.add_argument("-l", dest="operand", type=int)
-    wc_parse.set_defaults(func=wc)
 
     # Gather up the args passed to us
     args = parser.parse_args()
@@ -40,13 +31,16 @@ def main():
     # Capture execution in a try block
     try:
         # Get the function call we'll pass this to
-        func = args.func
         # Switch based on what command was provided for the subcommand
         if args.commands == "head":
-            value = func(f=args.file, n=args.n, c=args.c)
-            print(value)
-    except:
-        parser.error("Too few arguments")
+            head = Head(args.files, args.n, args.c)
+            if args.n:
+                head.head("lines")
+            if args.c:
+                head.head("bytes")
+    except Exception as e:
+        print(e)
+        parser.error("Error")
     # print(head_parse.parse_args())
 
 
