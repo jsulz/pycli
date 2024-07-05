@@ -3,6 +3,7 @@
 import argparse
 from .head import Head
 from .wc import WC
+from .cat import Cat
 import sys
 
 
@@ -17,19 +18,25 @@ def main():
     # using the 'dest' is helpful to add a namespace to query on
     subparser = parser.add_subparsers(help="Sub-command help", dest="commands")
 
-    # Head command
+    # head command
     head_parse = subparser.add_parser(name="head")
     head_parse.add_argument("files", type=str, nargs="+")
     head_parse.add_argument("-n", dest="n", type=int)
     head_parse.add_argument("-c", dest="c", type=int)
 
-    # WC command
+    # wc command
     wc_parse = subparser.add_parser(name="wc")
     wc_parse.add_argument("files", type=str, nargs="*", default=sys.stdin)
     wc_parse.add_argument("-c", dest="c", action="store_true")
     wc_parse.add_argument("-l", dest="l", action="store_true")
     wc_parse.add_argument("-m", dest="m", action="store_true")
     wc_parse.add_argument("-w", dest="w", action="store_true")
+
+    # cat command
+    wc_parse = subparser.add_parser(name="cat")
+    wc_parse.add_argument("files", type=str, nargs="*", default=sys.stdin)
+    wc_parse.add_argument("-n", dest="n", action="store_true")
+    wc_parse.add_argument("-b", dest="b", action="store_true")
 
     # Gather up the args passed to us
     args = parser.parse_args()
@@ -48,6 +55,15 @@ def main():
             print(type(args.files))
             wc = WC(args.files, args.c, args.l, args.m, args.w)
             wc.wc()
+        if args.commands == "cat":
+            if (
+                isinstance(args.files, list)
+                and len(args.files) == 1
+                and args.files[0] == "-"
+            ):
+                args.files = sys.stdin
+            cat = Cat(args.files, args.n, args.b)
+            cat.cat()
     except Exception as e:
         print(e)
     # print(head_parse.parse_args())
