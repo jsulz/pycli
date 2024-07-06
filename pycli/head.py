@@ -1,3 +1,10 @@
+""" This module contains the an implementation of head
+    as a Python class which is responsible for reading the contents
+    of a file/files and printing them to standard output. Additional 
+    functionality includes the ability to read a certain number of lines
+    or bytes from the file.
+"""
+
 import sys
 
 

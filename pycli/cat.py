@@ -1,5 +1,9 @@
+""" This module contains the an implementation of cat
+    as a Python class which is responsible for reading the contents
+    of a file/files/standard input and printing them to standard output.
+"""
+
 import sys
-import fileinput
 
 
 class Cat:

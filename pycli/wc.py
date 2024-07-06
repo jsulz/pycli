@@ -1,3 +1,7 @@
+""" This module contains an implementation of wc in Python. 
+    The class is responsible for reading the contents of a file/files
+    and printing out the number of lines, words, characters, and bytes in that file/files.
+"""
 import os
 import sys
 
