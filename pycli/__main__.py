@@ -5,6 +5,7 @@ from .head import Head
 from .wc import WC
 from .cat import Cat
 from .cut import Cut
+from .uniq import Uniq
 import sys
 
 
@@ -45,6 +46,13 @@ def main():
     cut_parse.add_argument("-f", required=True, dest="f", type=str)
     cut_parse.add_argument("-d", dest="d", type=str, default="\t")
 
+    # uniq command
+    uniq_parse = subparser.add_parser(name="uniq")
+    uniq_parse.add_argument("files", type=str, nargs="*", default=sys.stdin)
+    uniq_parse.add_argument("-c", dest="c", action="store_true")
+    uniq_parse.add_argument("-d", action="store_true", dest="d")
+    uniq_parse.add_argument("-u", action="store_true", dest="u")
+
     # Gather up the args passed to us
     args = parser.parse_args()
 
@@ -80,9 +88,20 @@ def main():
                 args.files = sys.stdin
             cut = Cut(args.files, args.f, args.d)
             cut.cut()
+        if args.commands == "uniq":
+
+            if check__if_stdin(args.files):
+                args.files = sys.stdin
+            uniq = Uniq(args.files, args.c, args.d, args.u)
+            uniq.uniq()
     except Exception as e:
         print(e)
     # print(head_parse.parse_args())
+
+
+def check__if_stdin(files):
+    if isinstance(files, list) and len(files) == 1 and files[0] == "-":
+        return True
 
 
 if __name__ == "__main__":
