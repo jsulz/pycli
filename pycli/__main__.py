@@ -90,16 +90,23 @@ def main():
             cut.cut()
         if args.commands == "uniq":
 
-            if check__if_stdin(args.files):
+            if check_if_stdin(args.files):
                 args.files = sys.stdin
-            uniq = Uniq(args.files, args.c, args.d, args.u)
+
+            output = False
+            if len(args.files) == 2 and args.files[0] == "-":
+
+                output = args.files[1]
+                args.files = sys.stdin
+
+            uniq = Uniq(args.files, args.c, args.d, args.u, output)
             uniq.uniq()
     except Exception as e:
         print(e)
     # print(head_parse.parse_args())
 
 
-def check__if_stdin(files):
+def check_if_stdin(files):
     if isinstance(files, list) and len(files) == 1 and files[0] == "-":
         return True
 
