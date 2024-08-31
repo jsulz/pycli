@@ -1,8 +1,4 @@
-This is small collection of Python classes that mimic the functionality of core Unix commands.
-
-The primary goal of this repository is to build up the knowledge of these Unix commands while also practicing my Python programming and preparing me to do these same exercises in future languages that I want to learn.
-
-All of these (as well as the idea of practicing on these commands) are inspired by [John Crickett's Coding Challenges](https://codingchallenges.fyi/).
+This is a repository designed primarily to help me learn a variety of things (math, Unix commands, classic algorithms, etc) through code. Inside the `pycli` directory are all of the available commands.
 
 To download this and run it locally, you can either:
 
@@ -19,11 +15,19 @@ $ pipx install git+https://github.com/jsulz/pycli.git
 
 Then, you can run each of the supported commands using `pycli <command>`
 
+Initially, this began as an exercise in learning Unix commands. As a result, there are a set of commands inside the `pycli` namespace that mirror the Unix functionality provided by that same command.
+
 The current supported Unix commands are:
 
 - `head`
 - `cat`
 - `wc`
 - `cut`
+- `uniq`
 
 Not all flags are supported, but each command does support the `-h` flag, e.g., `pycli head -h` which will show what options are available.
+
+Additionally, this is a space where I've spent time learning about Natural Language Processing algorithms. In that vein, following commands are supported:
+
+- `bpe`
+- `wordpiece`

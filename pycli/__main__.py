@@ -2,11 +2,16 @@
 
 import argparse
 from .head import Head
+from .bpe import BPE
 from .wc import WC
 from .cat import Cat
 from .cut import Cut
 from .uniq import Uniq
 import sys
+import os
+
+os.environ["TRANSFORMERS_NO_ADVISORY_WARNINGS"] = "1"
+os.environ["TRANSFORMERS_VERBOSITY"] = "error"
 
 
 def main():
@@ -19,6 +24,9 @@ def main():
     # Add subparser so we can do multiple commands
     # using the 'dest' is helpful to add a namespace to query on
     subparser = parser.add_subparsers(help="Sub-command help", dest="commands")
+
+    # NLP commaands
+    BPE.register_subcommand(subparser)
 
     # head command
     Head.register_subcommand(subparser)
@@ -57,7 +65,7 @@ def main():
     try:
         # Get the function call we'll pass this to
         # Switch based on what command was provided for the subcommand
-        if args.commands == "head":
+        if args.commands in ["bpe", "head"]:
             args.func(args).run()
         if args.commands == "wc":
             wc = WC(args.files, args.c, args.l, args.m, args.w)
