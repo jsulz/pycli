@@ -6,18 +6,27 @@
 """
 
 import sys
+from argparse import Namespace, _SubParsersAction
 
 
 class Head:
-    def __init__(self, files, n_lines, c_bytes):
-        self.files = files
-        self.n_lines = n_lines
-        self.c_bytes = c_bytes
+    def __init__(self, args: Namespace):
+        self.files = args.files
+        self.n_lines = args.n
+        self.c_bytes = args.c
+
+    @staticmethod
+    def register_subcommand(subparser: _SubParsersAction):
+        head_parse = subparser.add_parser(name="head")
+        head_parse.add_argument("files", type=str, nargs="+")
+        head_parse.add_argument("-n", dest="n", type=int)
+        head_parse.add_argument("-c", dest="c", type=int)
+        head_parse.set_defaults(func=Head)
 
     # Opens the file and prints out however many lines or bytes have been requested
-    def head(self, type="lines"):
+    def run(self):
         mode = "r"
-        if type == "bytes":
+        if self.c_bytes:
             mode += "b"
 
         for file in self.files:
@@ -26,7 +35,7 @@ class Head:
             try:
 
                 with open(file, mode=mode) as f:
-                    if type == "bytes":
+                    if self.c_bytes:
                         sys.stdout.buffer.write(f.read(self.c_bytes) + b"\n")
                         sys.stdout.flush()
                         continue

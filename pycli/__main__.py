@@ -21,10 +21,7 @@ def main():
     subparser = parser.add_subparsers(help="Sub-command help", dest="commands")
 
     # head command
-    head_parse = subparser.add_parser(name="head")
-    head_parse.add_argument("files", type=str, nargs="+")
-    head_parse.add_argument("-n", dest="n", type=int)
-    head_parse.add_argument("-c", dest="c", type=int)
+    Head.register_subcommand(subparser)
 
     # wc command
     wc_parse = subparser.add_parser(name="wc")
@@ -61,11 +58,7 @@ def main():
         # Get the function call we'll pass this to
         # Switch based on what command was provided for the subcommand
         if args.commands == "head":
-            head = Head(args.files, args.n, args.c)
-            if args.n:
-                head.head("lines")
-            if args.c:
-                head.head("bytes")
+            args.func(args).run()
         if args.commands == "wc":
             wc = WC(args.files, args.c, args.l, args.m, args.w)
             wc.wc()
